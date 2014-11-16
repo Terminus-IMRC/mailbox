@@ -34,9 +34,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdint.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <linux/ioctl.h>
 
 #include "pagesize.h"
 #include "mailbox.h"
+
+#define MAJOR_NUM 100
+#define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
+#define DEVICE_FILE_NAME "char_dev"
 
 void *mapmem(unsigned base, unsigned size)
 {
