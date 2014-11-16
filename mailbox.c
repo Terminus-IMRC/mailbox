@@ -35,20 +35,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
+#include "pagesize.h"
 #include "mailbox.h"
-
-#define PAGE_SIZE (4*1024)
 
 void *mapmem(unsigned base, unsigned size)
 {
    int mem_fd;
-   unsigned offset = base % PAGE_SIZE;
-   base = base - offset;
+   long pagesize;
+
    /* open /dev/mem */
    if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
       printf("can't open /dev/mem\nThis program should be run as root. Try prefixing command with: sudo\n");
       exit (-1);
    }
+
+   pagesize=get_pagesize();
+
+   unsigned offset = base % pagesize;
+   base = base - offset;
    void *mem = mmap(
       0,
       size,
