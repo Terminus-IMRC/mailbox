@@ -42,7 +42,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define MAJOR_NUM 100
 #define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
-#define DEVICE_FILE_NAME "char_dev"
+#define DEVICE_PREFIX "/dev/"
+#define DEVICE_FILE_NAME "vcio"
 
 void *mapmem_cpu(unsigned base, unsigned size)
 {
@@ -254,10 +255,9 @@ int mbox_open() {
    int file_desc;
 
    // open a char device file used for communicating with kernel mbox driver
-   file_desc = open(DEVICE_FILE_NAME, 0);
+   file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
    if (file_desc < 0) {
       printf("Can't open device file: %s\n", DEVICE_FILE_NAME);
-      printf("Try creating a device file with: sudo mknod %s c %d 0\n", DEVICE_FILE_NAME, MAJOR_NUM);
       exit(-1);
    }
    return file_desc;
