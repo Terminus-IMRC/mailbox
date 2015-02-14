@@ -44,7 +44,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
 #define DEVICE_FILE_NAME "char_dev"
 
-void *mapmem(unsigned base, unsigned size)
+void *mapmem_cpu(unsigned base, unsigned size)
 {
    int mem_fd;
    long pagesize;
@@ -77,7 +77,7 @@ void *mapmem(unsigned base, unsigned size)
    return (char *)mem + offset;
 }
 
-void *unmapmem(void *addr, unsigned size)
+void *unmapmem_cpu(void *addr, unsigned size)
 {
    int s = munmap(addr, size);
    if (s != 0) {
