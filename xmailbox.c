@@ -19,12 +19,12 @@ unsigned xmem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags
 
 unsigned xmem_free(int file_desc, unsigned handle)
 {
-	unsigned handle = mem_free(file_desc, size, align, flags);
-	if (handle) {
+	unsigned p = mem_free(file_desc, handle);
+	if (p) {
 		error("mem_free returned an error\n");
 		exit(EXIT_FAILURE);
 	}
-	return handle;
+	return p;
 }
 
 unsigned xmem_lock(int file_desc, unsigned handle)
