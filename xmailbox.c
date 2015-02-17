@@ -2,11 +2,6 @@
 #include "mailbox.h"
 #include "error.h"
 
-void *xmapmem_cpu(unsigned base, unsigned size)
-{
-	return mapmem_cpu(base, size);
-}
-
 unsigned xmem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	unsigned handle = mem_alloc(file_desc, size, align, flags);
