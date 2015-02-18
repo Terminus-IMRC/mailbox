@@ -257,7 +257,7 @@ int mbox_open() {
    // open a char device file used for communicating with kernel mbox driver
    file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
    if (file_desc < 0) {
-      printf("Can't open device file: %s\n", DEVICE_FILE_NAME);
+      printf("Can't open device file: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME);
       exit(-1);
    }
    return file_desc;
