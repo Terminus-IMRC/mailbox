@@ -1,6 +1,6 @@
-MAILBOX_TARGET := libmailbox.a
-MAILBOX_SRCS := mailbox.c xmailbox.c pagesize.c
-MAILBOX_OBJS := $(MAILBOX_SRCS:%.c=%.c.o)
-MAILBOX_DEPS := $(MAILBOX_SRCS:%.c=%.c.d)
-MAILBOX_ALLDEPS = $(MAKEFILE_LIST_SANS_DEPS)
-MAILBOX_CFLAGS := -Wall -Wextra -O2
+TARGET_mailbox := libmailbox.a
+SRCS_mailbox := mailbox.c xmailbox.c pagesize.c
+OBJS_mailbox := $(SRCS_mailbox:%.c=%.c.o)
+DEPS_mailbox := $(SRCS_mailbox:%.c=%.c.d)
+ALLDEPS_mailbox = $(MAKEFILE_LIST_SANS_DEPS)
+CFLAGS_mailbox := -Wall -Wextra -O2

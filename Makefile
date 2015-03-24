@@ -2,12 +2,12 @@ all:
 
 include Makefile.info
 
-TARGET := $(MAILBOX_TARGET)
-SRCS := $(MAILBOX_SRCS)
-OBJS := $(MAILBOX_OBJS)
-DEPS := $(MAILBOX_DEPS)
-ALLDEPS := $(MAILBOX_ALLDEPS)
-CFLAGS := $(MAILBOX_CFLAGS)
+TARGET := $(TARGET_mailbox)
+SRCS := $(SRCS_mailbox)
+OBJS := $(OBJS_mailbox)
+DEPS := $(DEPS_mailbox)
+ALLDEPS := $(ALLDEPS_mailbox)
+CFLAGS := $(CFLAGS_mailbox)
 
 CC := gcc
 AR := ar
