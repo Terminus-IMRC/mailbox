@@ -1,17 +1,19 @@
-TARGET := libmailbox.a
-SRCS := mailbox.c xmailbox.c pagesize.c
-OBJS := $(SRCS:%.c=%.c.o)
-DEPS := $(SRCS:%.c=%.c.d)
-ALLDEPS = $(MAKEFILE_LIST_SANS_DEPS)
-CFLAGS := -Wall -Wextra -O2
+all:
+
+include Makefile.info
+
+TARGET := $(MAILBOX_TARGET)
+SRCS := $(MAILBOX_SRCS)
+OBJS := $(MAILBOX_OBJS)
+DEPS := $(MAILBOX_DEPS)
+ALLDEPS := $(MAILBOX_ALLDEPS)
+CFLAGS := $(MAILBOX_CFLAGS)
 
 CC := gcc
 AR := ar
 ARFLAGS := cr
 RANLIB := ranlib
 RM := rm -f
-
-all:
 
 VALID_MAKECMDGOALS := all $(TARGET) %.c.d %.c.o clean
 NONEED_DEP_MAKECMDGOALS := clean
