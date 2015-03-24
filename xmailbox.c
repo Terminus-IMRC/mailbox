@@ -35,11 +35,11 @@ unsigned xmem_lock(int file_desc, unsigned handle)
 unsigned xmem_unlock(int file_desc, unsigned handle)
 {
 	unsigned p = mem_unlock(file_desc, handle);
-	if (!handle) {
+	if (!p) {
 		error("mem_free returned an error\n");
 		exit(EXIT_FAILURE);
 	}
-	return handle;
+	return p;
 }
 
 int xmbox_open()
