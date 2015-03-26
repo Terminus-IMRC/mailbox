@@ -31,7 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <assert.h>
 #include <stdint.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
@@ -49,46 +48,45 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 void *mapmem_cpu(unsigned base, unsigned size)
 {
-   int mem_fd;
-   long pagesize;
+	int mem_fd;
+	long pagesize;
 
-   /* open /dev/mem */
-   if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
-			error("open: /dev/mem: %s\n", strerror(errno));
-      exit (-1);
-   }
+	/* open /dev/mem */
+	if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
+		error("open: /dev/mem: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
-   pagesize=get_pagesize();
+	pagesize = get_pagesize();
 
 	if (base % pagesize != 0) {
 		error("specified base pointer is not pagesize-aligned\n");
 		exit(EXIT_FAILURE);
 	}
-   void *mem = mmap(
-      0,
-      size,
-      PROT_READ|PROT_WRITE,
-      MAP_SHARED/*|MAP_FIXED*/,
-      mem_fd,
-      base);
+
+	void *mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED /*| MAP_FIXED*/, mem_fd, base);
+
 #ifdef DEBUG
-   printf("base=0x%x, mem=%p\n", base, mem);
+	printf("base=0x%x, mem=%p\n", base, mem);
 #endif
-   if (mem == MAP_FAILED) {
-      error("mmap: %s\n", strerror(errno));
-      exit (-1);
-   }
-   close(mem_fd);
-   return (char *)mem;
+
+	if (mem == MAP_FAILED) {
+		error("mmap: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+	close(mem_fd);
+
+	return mem;
 }
 
 void unmapmem_cpu(void *addr, unsigned size)
 {
-   int s = munmap(addr, size);
-   if (s != 0) {
-      error("munmap: %s\n", strerror(errno));
-      exit (-1);
-   }
+	int s = munmap(addr, size);
+	if (s != 0) {
+		error("munmap: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 }
 
 /*
@@ -97,176 +95,193 @@ void unmapmem_cpu(void *addr, unsigned size)
 
 static int mbox_property(int file_desc, void *buf)
 {
-   int ret_val = ioctl(file_desc, IOCTL_MBOX_PROPERTY, buf);
+	int ret_val = ioctl(file_desc, IOCTL_MBOX_PROPERTY, buf);
 
-   if (ret_val < 0) {
-			error("ioctl: %s\n", strerror(errno));
-   }
+	if (ret_val < 0) {
+		error("ioctl: %s\n", strerror(errno));
+	}
 
 #ifdef DEBUG
-   unsigned *p = buf; int i; unsigned size = *(unsigned *)buf;
-   for (i=0; i<size/4; i++)
-      printf("%04x: 0x%08x\n", i*sizeof *p, p[i]);
+	unsigned *p = buf; int i; unsigned size = *(unsigned *)buf;
+	for (i = 0; i < size / 4; i++)
+		printf("%04x: 0x%08x\n", i*sizeof *p, p[i]);
 #endif
-   return ret_val;
+
+	return ret_val;
 }
 
 unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 {
-   int i=0;
-   unsigned p[32];
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0x3000c; // (the tag id)
-   p[i++] = 12; // (size of the buffer)
-   p[i++] = 12; // (size of the data)
-   p[i++] = size; // (num bytes? or pages?)
-   p[i++] = align; // (alignment)
-   p[i++] = flags; // (MEM_FLAG_L1_NONALLOCATING)
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x3000c; // (the tag id)
+	p[i++] = 12; // (size of the buffer)
+	p[i++] = 12; // (size of the data)
+	p[i++] = size; // (num bytes? or pages?)
+	p[i++] = align; // (alignment)
+	p[i++] = flags; // (MEM_FLAG_L1_NONALLOCATING)
 
-   mbox_property(file_desc, p);
-   return p[5];
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
+
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
 unsigned mem_free(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0x3000f; // (the tag id)
-   p[i++] = 4; // (size of the buffer)
-   p[i++] = 4; // (size of the data)
-   p[i++] = handle;
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x3000f; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = handle;
 
-   mbox_property(file_desc, p);
-   return p[5];
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
+
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
 unsigned mem_lock(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0x3000d; // (the tag id)
-   p[i++] = 4; // (size of the buffer)
-   p[i++] = 4; // (size of the data)
-   p[i++] = handle;
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x3000d; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = handle;
 
-   mbox_property(file_desc, p);
-   return p[5];
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
+
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
 unsigned mem_unlock(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0x3000e; // (the tag id)
-   p[i++] = 4; // (size of the buffer)
-   p[i++] = 4; // (size of the data)
-   p[i++] = handle;
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x3000e; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = handle;
 
-   mbox_property(file_desc, p);
-   return p[5];
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
+
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
 unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
 {
-   int i=0;
-   unsigned p[32];
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0x30010; // (the tag id)
-   p[i++] = 28; // (size of the buffer)
-   p[i++] = 28; // (size of the data)
-   p[i++] = code;
-   p[i++] = r0;
-   p[i++] = r1;
-   p[i++] = r2;
-   p[i++] = r3;
-   p[i++] = r4;
-   p[i++] = r5;
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x30010; // (the tag id)
+	p[i++] = 28; // (size of the buffer)
+	p[i++] = 28; // (size of the data)
+	p[i++] = code;
+	p[i++] = r0;
+	p[i++] = r1;
+	p[i++] = r2;
+	p[i++] = r3;
+	p[i++] = r4;
+	p[i++] = r5;
 
-   mbox_property(file_desc, p);
-   return p[5];
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
+
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
 unsigned qpu_enable(int file_desc, unsigned enable)
 {
-   int i=0;
-   unsigned p[32];
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
 
-   p[i++] = 0x30012; // (the tag id)
-   p[i++] = 4; // (size of the buffer)
-   p[i++] = 4; // (size of the data)
-   p[i++] = enable;
+	p[i++] = 0x30012; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = enable;
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
 
-   mbox_property(file_desc, p);
-   return p[5];
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
-unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout) {
-   int i=0;
-   unsigned p[32];
+unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
+{
+	int i = 0;
+	unsigned p[32];
 
-   p[i++] = 0; // size
-   p[i++] = 0x00000000; // process request
-   p[i++] = 0x30011; // (the tag id)
-   p[i++] = 16; // (size of the buffer)
-   p[i++] = 16; // (size of the data)
-   p[i++] = num_qpus;
-   p[i++] = control;
-   p[i++] = noflush;
-   p[i++] = timeout; // ms
+	p[i++] = 0; // size
+	p[i++] = 0x00000000; // process request
+	p[i++] = 0x30011; // (the tag id)
+	p[i++] = 16; // (size of the buffer)
+	p[i++] = 16; // (size of the data)
+	p[i++] = num_qpus;
+	p[i++] = control;
+	p[i++] = noflush;
+	p[i++] = timeout; // ms
 
-   p[i++] = 0x00000000; // end tag
-   p[0] = i*sizeof *p; // actual size
+	p[i++] = 0x00000000; // end tag
+	p[0] = i * sizeof(*p); // actual size
 
-   mbox_property(file_desc, p);
-   return p[5];
+	mbox_property(file_desc, p);
+
+	return p[5];
 }
 
-int mbox_open() {
-   int file_desc;
+int mbox_open()
+{
+	int file_desc;
 
-   // open a char device file used for communicating with kernel mbox driver
-   file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
-   if (file_desc < 0) {
-			error("open: %s: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME, strerror(errno));
-      exit(-1);
-   }
-   return file_desc;
+	// open a char device file used for communicating with kernel mbox driver
+	file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
+	if (file_desc < 0) {
+		error("open: %s: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+	return file_desc;
 }
 
-void mbox_close(int file_desc) {
-  close(file_desc);
+void mbox_close(int file_desc)
+{
+	close(file_desc);
 }
