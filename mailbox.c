@@ -37,7 +37,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <linux/ioctl.h>
 #include <errno.h>
 
-#include "pagesize.h"
 #include "mailbox.h"
 #include "error.h"
 
@@ -49,15 +48,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 void *mapmem_cpu(unsigned base, unsigned size)
 {
 	int mem_fd;
-	long pagesize;
+	const int pagesize = 4096;
 
 	/* open /dev/mem */
 	if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
 		error("open: /dev/mem: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-
-	pagesize = get_pagesize();
 
 	if (base % pagesize != 0) {
 		error("specified base pointer is not pagesize-aligned\n");
