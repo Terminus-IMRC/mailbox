@@ -37,13 +37,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <linux/ioctl.h>
 #include <errno.h>
 
+#include "vcio.h"
 #include "mailbox.h"
 #include "error.h"
 
-#define MAJOR_NUM 100
-#define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
 #define DEVICE_PREFIX "/dev/"
-#define DEVICE_FILE_NAME "vcio"
 
 void *mapmem_cpu(unsigned base, unsigned size)
 {
@@ -113,16 +111,16 @@ unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x3000c; // (the tag id)
+	p[i++] = VCMSG_SET_ALLOCATE_MEM; // (the tag id)
 	p[i++] = 12; // (size of the buffer)
 	p[i++] = 12; // (size of the data)
 	p[i++] = size; // (num bytes? or pages?)
 	p[i++] = align; // (alignment)
 	p[i++] = flags; // (MEM_FLAG_L1_NONALLOCATING)
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -136,14 +134,14 @@ unsigned mem_free(int file_desc, unsigned handle)
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x3000f; // (the tag id)
+	p[i++] = VCMSG_SET_RELEASE_MEM; // (the tag id)
 	p[i++] = 4; // (size of the buffer)
 	p[i++] = 4; // (size of the data)
 	p[i++] = handle;
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -157,14 +155,14 @@ unsigned mem_lock(int file_desc, unsigned handle)
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x3000d; // (the tag id)
+	p[i++] = VCMSG_SET_LOCK_MEM; // (the tag id)
 	p[i++] = 4; // (size of the buffer)
 	p[i++] = 4; // (size of the data)
 	p[i++] = handle;
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -178,14 +176,14 @@ unsigned mem_unlock(int file_desc, unsigned handle)
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x3000e; // (the tag id)
+	p[i++] = VCMSG_SET_UNLOCK_MEM; // (the tag id)
 	p[i++] = 4; // (size of the buffer)
 	p[i++] = 4; // (size of the data)
 	p[i++] = handle;
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -199,9 +197,9 @@ unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, un
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x30010; // (the tag id)
+	p[i++] = VCMSG_SET_EXECUTE_CODE; // (the tag id)
 	p[i++] = 28; // (size of the buffer)
 	p[i++] = 28; // (size of the data)
 	p[i++] = code;
@@ -212,7 +210,7 @@ unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, un
 	p[i++] = r4;
 	p[i++] = r5;
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -226,14 +224,14 @@ unsigned qpu_enable(int file_desc, unsigned enable)
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
+	p[i++] = VCMSG_PROCESS_REQUEST;
 
-	p[i++] = 0x30012; // (the tag id)
+	p[i++] = VCMSG_SET_ENABLE_QPU; // (the tag id)
 	p[i++] = 4; // (size of the buffer)
 	p[i++] = 4; // (size of the data)
 	p[i++] = enable;
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
@@ -247,8 +245,8 @@ unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigne
 	unsigned p[32];
 
 	p[i++] = 0; // size
-	p[i++] = 0x00000000; // process request
-	p[i++] = 0x30011; // (the tag id)
+	p[i++] = VCMSG_PROCESS_REQUEST;
+	p[i++] = VCMSG_SET_EXECUTE_QPU; // (the tag id)
 	p[i++] = 16; // (size of the buffer)
 	p[i++] = 16; // (size of the data)
 	p[i++] = num_qpus;
@@ -256,7 +254,7 @@ unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigne
 	p[i++] = noflush;
 	p[i++] = timeout; // ms
 
-	p[i++] = 0x00000000; // end tag
+	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(*p); // actual size
 
 	mbox_property(file_desc, p);
