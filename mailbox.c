@@ -60,8 +60,10 @@ void *mapmem_cpu(unsigned base, unsigned size)
 
    pagesize=get_pagesize();
 
-   unsigned offset = base % pagesize;
-   base = base - offset;
+	if (base % pagesize != 0) {
+		error("specified base pointer is not pagesize-aligned\n");
+		exit(EXIT_FAILURE);
+	}
    void *mem = mmap(
       0,
       size,
