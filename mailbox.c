@@ -36,9 +36,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/ioctl.h>
+#include <errno.h>
 
 #include "pagesize.h"
 #include "mailbox.h"
+#include "error.h"
 
 #define MAJOR_NUM 100
 #define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
@@ -52,7 +54,7 @@ void *mapmem_cpu(unsigned base, unsigned size)
 
    /* open /dev/mem */
    if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
-      printf("can't open /dev/mem\nThis program should be run as root. Try prefixing command with: sudo\n");
+			error("open: /dev/mem: %s\n", strerror(errno));
       exit (-1);
    }
 
@@ -71,18 +73,18 @@ void *mapmem_cpu(unsigned base, unsigned size)
    printf("base=0x%x, mem=%p\n", base, mem);
 #endif
    if (mem == MAP_FAILED) {
-      printf("mmap error %d\n", (int)mem);
+      error("mmap: %s\n", strerror(errno));
       exit (-1);
    }
    close(mem_fd);
-   return (char *)mem + offset;
+   return (char *)mem;
 }
 
 void unmapmem_cpu(void *addr, unsigned size)
 {
    int s = munmap(addr, size);
    if (s != 0) {
-      printf("munmap error %d\n", s);
+      error("munmap: %s\n", strerror(errno));
       exit (-1);
    }
 }
@@ -96,7 +98,7 @@ static int mbox_property(int file_desc, void *buf)
    int ret_val = ioctl(file_desc, IOCTL_MBOX_PROPERTY, buf);
 
    if (ret_val < 0) {
-      printf("ioctl_set_msg failed:%d\n", ret_val);
+			error("ioctl: %s\n", strerror(errno));
    }
 
 #ifdef DEBUG
@@ -257,7 +259,7 @@ int mbox_open() {
    // open a char device file used for communicating with kernel mbox driver
    file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
    if (file_desc < 0) {
-      printf("Can't open device file: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME);
+			error("open: %s: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME, strerror(errno));
       exit(-1);
    }
    return file_desc;
