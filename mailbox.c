@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2012, Broadcom Europe Ltd.
-Copyright (c) 2014, Sugizaki Yukimasa
+Copyright (c) 2014-2015, Sugizaki Yukimasa
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
