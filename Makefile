@@ -1,13 +1,11 @@
 all:
 
-include Makefile.info
-
-TARGET := $(TARGET_mailbox)
-SRCS := $(SRCS_mailbox)
-OBJS := $(OBJS_mailbox)
-DEPS := $(DEPS_mailbox)
-ALLDEPS := $(ALLDEPS_mailbox)
-CFLAGS := $(CFLAGS_mailbox)
+TARGET := libmailbox.so
+SRCS := mailbox.c xmailbox.c
+OBJS := $(SRCS:%.c=%.c.o)
+DEPS := $(SRCS:%.c=%.c.d)
+ALLDEPS = $(MAKEFILE_LIST_SANS_DEPS)
+CFLAGS := -Wall -Wextra -O2
 
 CC := gcc
 AR := ar
@@ -39,7 +37,7 @@ COMPILE.d = $(CC) $(CFLAGS) $(EXTRACFLAGS) $(CPPFLAGS) $(EXTRACPPFLAGS) $(TARGET
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS) $(ALLDEPS)
+libmailbox.so: $(OBJS) $(ALLDEPS)
 	$(COMPILE.o) $(OUTPUT_OPTION) $(OBJS)
 
 %.c.o: %.c $(ALLDEPS)

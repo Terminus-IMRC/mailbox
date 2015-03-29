@@ -1,6 +1,0 @@
-TARGET_mailbox := libmailbox.so
-SRCS_mailbox := mailbox.c xmailbox.c
-OBJS_mailbox := $(SRCS_mailbox:%.c=%.c.o)
-DEPS_mailbox := $(SRCS_mailbox:%.c=%.c.d)
-ALLDEPS_mailbox = $(MAKEFILE_LIST_SANS_DEPS)
-CFLAGS_mailbox := -Wall -Wextra -O2
