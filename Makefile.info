@@ -1,4 +1,4 @@
-TARGET_mailbox := libmailbox.a
+TARGET_mailbox := libmailbox.so
 SRCS_mailbox := mailbox.c xmailbox.c
 OBJS_mailbox := $(SRCS_mailbox:%.c=%.c.o)
 DEPS_mailbox := $(SRCS_mailbox:%.c=%.c.d)
