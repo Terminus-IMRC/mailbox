@@ -39,30 +39,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "vcio.h"
 #include "mailbox.h"
+#include "mb_send.h"
 #include "error.h"
 
 #define DEVICE_PREFIX "/dev/"
-
-/*
- * use ioctl to send mbox property message
- */
-
-static int mbox_property(int file_desc, void *buf)
-{
-	int ret_val = ioctl(file_desc, IOCTL_MBOX_PROPERTY, buf);
-
-	if (ret_val < 0) {
-		error("ioctl: %s\n", strerror(errno));
-	}
-
-#ifdef DEBUG
-	unsigned *p = buf; int i; unsigned size = *(unsigned *)buf;
-	for (i = 0; i < size / 4; i++)
-		printf("%04x: 0x%08x\n", i*sizeof *p, p[i]);
-#endif
-
-	return ret_val;
-}
 
 unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 {
