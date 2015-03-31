@@ -26,8 +26,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __MAILBOX_H_INCLUDED__
-#define __MAILBOX_H_INCLUDED__
+#ifndef _MAILBOX_H_INCLUDED_
+#define _MAILBOX_H_INCLUDED_
 
 	unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
 	unsigned mem_free(int file_desc, unsigned handle);
@@ -43,4 +43,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mapmem.h"
 #include "mbfd.h"
 
-#endif /* __MAILBOX_H_INCLUDED__ */
+#endif /* _MAILBOX_H_INCLUDED_ */
