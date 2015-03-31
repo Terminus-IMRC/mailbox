@@ -158,6 +158,48 @@ void mb_get_board_serial(unsigned p[], int file_desc)
 	CHECK_PR_VALIDITY(p);
 }
 
+void mb_get_arm_memory(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_ARM_MEMORY;
+	p[i++] = 8;
+	p[i++] = 0;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mb_get_vc_memory(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_VC_MEMORY;
+	p[i++] = 8;
+	p[i++] = 0;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
 void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	int i = 0;

@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	void mb_get_board_revision(unsigned p[], int file_desc);
 	void mb_get_board_mac_address(unsigned p[], int file_desc);
 	void mb_get_board_serial(unsigned p[], int file_desc);
+	void mb_get_arm_memory(unsigned p[], int file_desc);
+	void mb_get_vc_memory(unsigned p[], int file_desc);
 	void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags);
 	void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle);
 	void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle);
