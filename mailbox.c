@@ -42,6 +42,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mb_send.h"
 #include "error.h"
 
+#define CHECK_PR_VALIDITY(p) \
+{ \
+	if (p[2] == VCMSG_REQUEST_FAILED) { \
+		error("process request failed\n"); \
+		exit(EXIT_FAILURE); \
+	} \
+}
+
 void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	int i = 0;
@@ -60,6 +68,8 @@ void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned al
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle)
@@ -78,6 +88,8 @@ void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle)
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle)
@@ -96,6 +108,8 @@ void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle)
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle)
@@ -114,6 +128,8 @@ void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle)
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
@@ -138,6 +154,8 @@ void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
@@ -159,6 +177,8 @@ void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
 
 void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
@@ -177,4 +197,6 @@ void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
 	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
 }
