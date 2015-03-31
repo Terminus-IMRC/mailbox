@@ -44,9 +44,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CHECK_PR_VALIDITY(p) \
 { \
-	if (p[2] == VCMSG_REQUEST_FAILED) { \
-		error("process request failed\n"); \
-		exit(EXIT_FAILURE); \
+	switch (p[1]) { \
+		case VCMSG_REQUEST_SUCCESSFUL: \
+			break; \
+		case VCMSG_REQUEST_FAILED: \
+			error("process request failed\n"); \
+			exit(EXIT_FAILURE); \
+		default: \
+			error("unknown return code on process request: 0x%08x\n", p[1]); \
+			exit(EXIT_FAILURE); \
 	} \
 }
 
