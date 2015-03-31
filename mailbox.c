@@ -56,6 +56,108 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	} \
 }
 
+void mb_get_firmware_revision(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_FIRMWARE_REVISION;
+	p[i++] = 4;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mb_get_board_model(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_BOARD_MODEL;
+	p[i++] = 4;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mb_get_board_revision(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_BOARD_REVISION;
+	p[i++] = 4;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mb_get_board_mac_address(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_BOARD_MAC_ADDRESS;
+	p[i++] = 6;
+	p[i++] = 0;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mb_get_board_serial(unsigned p[], int file_desc)
+{
+	int i = 0;
+
+	p[i++] = 0;
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_GET_BOARD_SERIAL;
+	p[i++] = 8;
+	p[i++] = 0;
+	p[i++] = 0;
+	p[i++] = 0;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]);
+
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
 void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	int i = 0;

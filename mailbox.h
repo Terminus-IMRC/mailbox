@@ -29,6 +29,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _MAILBOX_H_INCLUDED_
 #define _MAILBOX_H_INCLUDED_
 
+	void mb_get_firmware_revision(unsigned p[], int file_desc);
+	void mb_get_board_model(unsigned p[], int file_desc);
+	void mb_get_board_revision(unsigned p[], int file_desc);
+	void mb_get_board_mac_address(unsigned p[], int file_desc);
+	void mb_get_board_serial(unsigned p[], int file_desc);
 	void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags);
 	void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle);
 	void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle);
