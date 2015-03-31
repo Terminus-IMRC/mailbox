@@ -42,8 +42,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mb_send.h"
 #include "error.h"
 
-#define DEVICE_PREFIX "/dev/"
-
 unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	int i = 0;
