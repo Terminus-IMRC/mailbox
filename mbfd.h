@@ -26,21 +26,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __MAILBOX_H_INCLUDED__
-#define __MAILBOX_H_INCLUDED__
+#ifndef _MBFD_H_INCLUDED_
+#define _MBFD_H_INCLUDED_
 
-	unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
-	unsigned mem_free(int file_desc, unsigned handle);
-	unsigned mem_lock(int file_desc, unsigned handle);
-	unsigned mem_unlock(int file_desc, unsigned handle);
-	void *mapmem_cpu(unsigned base, unsigned size);
-	void unmapmem_cpu(void *addr, unsigned size);
+	int mbox_open();
+	void mbox_close(int file_desc);
 
-	unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
-	unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
-	unsigned qpu_enable(int file_desc, unsigned enable);
-
-#include "mapmem.h"
-#include "mbfd.h"
-
-#endif /* __MAILBOX_H_INCLUDED__ */
+#endif /* _MBFD_H_INCLUDED_ */

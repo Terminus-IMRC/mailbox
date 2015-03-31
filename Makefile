@@ -1,7 +1,7 @@
 all:
 
 TARGET := libmailbox.so
-SRCS := mailbox.c xmailbox.c mapmem.c
+SRCS := mailbox.c xmailbox.c mapmem.c mbfd.c
 OBJS := $(SRCS:%.c=%.c.o)
 DEPS := $(SRCS:%.c=%.c.d)
 ALLDEPS = $(MAKEFILE_LIST_SANS_DEPS)

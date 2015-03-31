@@ -220,22 +220,3 @@ unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigne
 
 	return p[5];
 }
-
-int mbox_open()
-{
-	int file_desc;
-
-	// open a char device file used for communicating with kernel mbox driver
-	file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
-	if (file_desc < 0) {
-		error("open: %s: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME, strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-
-	return file_desc;
-}
-
-void mbox_close(int file_desc)
-{
-	close(file_desc);
-}
