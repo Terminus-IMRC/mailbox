@@ -62,24 +62,6 @@ void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned al
 	mbox_property(file_desc, p);
 }
 
-void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle)
-{
-	int i = 0;
-
-	p[i++] = 0; // size
-	p[i++] = VCMSG_PROCESS_REQUEST;
-
-	p[i++] = VCMSG_SET_RELEASE_MEM; // (the tag id)
-	p[i++] = 4; // (size of the buffer)
-	p[i++] = 4; // (size of the data)
-	p[i++] = handle;
-
-	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(p[0]); // actual size
-
-	mbox_property(file_desc, p);
-}
-
 void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle)
 {
 	int i = 0;
@@ -116,6 +98,24 @@ void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle)
 	mbox_property(file_desc, p);
 }
 
+void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle)
+{
+	int i = 0;
+
+	p[i++] = 0; // size
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_SET_RELEASE_MEM; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = handle;
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]); // actual size
+
+	mbox_property(file_desc, p);
+}
+
 void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
 {
 	int i = 0;
@@ -140,24 +140,6 @@ void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0
 	mbox_property(file_desc, p);
 }
 
-void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
-{
-	int i = 0;
-
-	p[i++] = 0; // size
-	p[i++] = VCMSG_PROCESS_REQUEST;
-
-	p[i++] = VCMSG_SET_ENABLE_QPU; // (the tag id)
-	p[i++] = 4; // (size of the buffer)
-	p[i++] = 4; // (size of the data)
-	p[i++] = enable;
-
-	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(p[0]); // actual size
-
-	mbox_property(file_desc, p);
-}
-
 void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
 {
 	int i = 0;
@@ -172,6 +154,24 @@ void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned
 	p[i++] = control;
 	p[i++] = noflush;
 	p[i++] = timeout; // ms
+
+	p[i++] = VCMSG_PROPERTY_END;
+	p[0] = i * sizeof(p[0]); // actual size
+
+	mbox_property(file_desc, p);
+}
+
+void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
+{
+	int i = 0;
+
+	p[i++] = 0; // size
+	p[i++] = VCMSG_PROCESS_REQUEST;
+
+	p[i++] = VCMSG_SET_ENABLE_QPU; // (the tag id)
+	p[i++] = 4; // (size of the buffer)
+	p[i++] = 4; // (size of the data)
+	p[i++] = enable;
 
 	p[i++] = VCMSG_PROPERTY_END;
 	p[0] = i * sizeof(p[0]); // actual size

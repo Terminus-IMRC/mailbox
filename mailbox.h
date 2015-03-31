@@ -30,12 +30,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _MAILBOX_H_INCLUDED_
 
 	void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags);
-	void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle);
 	void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle);
 	void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle);
+	void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle);
 	void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
-	void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable);
 	void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
+	void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable);
 
 #include "mapmem.h"
 #include "mbfd.h"
