@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2012, Broadcom Europe Ltd.
-Copyright (c) 2014, Sugizaki Yukimasa
+Copyright (c) 2014-2015, Sugizaki Yukimasa
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,23 +26,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __MAILBOX_H_INCLUDED__
-#define __MAILBOX_H_INCLUDED__
+#ifndef _MAPMEM_H_INCLUDED_
+#define _MAPMEM_H_INCLUDED_
 
-	int mbox_open();
-	void mbox_close(int file_desc);
-
-	unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
-	unsigned mem_free(int file_desc, unsigned handle);
-	unsigned mem_lock(int file_desc, unsigned handle);
-	unsigned mem_unlock(int file_desc, unsigned handle);
 	void *mapmem_cpu(unsigned base, unsigned size);
 	void unmapmem_cpu(void *addr, unsigned size);
 
-	unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
-	unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
-	unsigned qpu_enable(int file_desc, unsigned enable);
-
-#include "mapmem.h"
-
-#endif /* __MAILBOX_H_INCLUDED__ */
+#endif /* _MAPMEM_H_INCLUDED_ */

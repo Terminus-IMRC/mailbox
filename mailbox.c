@@ -43,47 +43,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define DEVICE_PREFIX "/dev/"
 
-void *mapmem_cpu(unsigned base, unsigned size)
-{
-	int mem_fd;
-	const int pagesize = 4096;
-
-	/* open /dev/mem */
-	if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
-		error("open: /dev/mem: %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-
-	if (base % pagesize != 0) {
-		error("specified base pointer is not pagesize-aligned\n");
-		exit(EXIT_FAILURE);
-	}
-
-	void *mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED /*| MAP_FIXED*/, mem_fd, base);
-
-#ifdef DEBUG
-	printf("base=0x%x, mem=%p\n", base, mem);
-#endif
-
-	if (mem == MAP_FAILED) {
-		error("mmap: %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-
-	close(mem_fd);
-
-	return mem;
-}
-
-void unmapmem_cpu(void *addr, unsigned size)
-{
-	int s = munmap(addr, size);
-	if (s != 0) {
-		error("munmap: %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-}
-
 /*
  * use ioctl to send mbox property message
  */
