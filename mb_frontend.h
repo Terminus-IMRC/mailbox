@@ -26,19 +26,15 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _MAILBOX_H_INCLUDED_
-#define _MAILBOX_H_INCLUDED_
+#ifndef _MB_FRONTEND_H_INCLUDED_
+#define _MB_FRONTEND_H_INCLUDED_
 
-	void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags);
-	void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
-	void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable);
-	void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
+	unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
+	unsigned mem_free(int file_desc, unsigned handle);
+	unsigned mem_lock(int file_desc, unsigned handle);
+	unsigned mem_unlock(int file_desc, unsigned handle);
+	unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
+	unsigned qpu_enable(int file_desc, unsigned enable);
+	unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
 
-#include "mapmem.h"
-#include "mbfd.h"
-#include "mb_frontend.h"
-
-#endif /* _MAILBOX_H_INCLUDED_ */
+#endif /* _MB_FRONTEND_H_INCLUDED_ */

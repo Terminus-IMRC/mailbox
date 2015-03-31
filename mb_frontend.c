@@ -26,19 +26,80 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _MAILBOX_H_INCLUDED_
-#define _MAILBOX_H_INCLUDED_
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+#include <linux/ioctl.h>
+#include <errno.h>
 
-	void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags);
-	void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle);
-	void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
-	void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable);
-	void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
+#include "vcio.h"
+#include "mailbox.h"
+#include "error.h"
 
-#include "mapmem.h"
-#include "mbfd.h"
-#include "mb_frontend.h"
+unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
+{
+	unsigned p[32];
 
-#endif /* _MAILBOX_H_INCLUDED_ */
+	mb_set_allocate_mem(p, file_desc, size, align, flags);
+
+	return p[5];
+}
+
+unsigned mem_free(int file_desc, unsigned handle)
+{
+	unsigned p[32];
+
+	mb_set_release_mem(p, file_desc, handle);
+
+	return p[5];
+}
+
+unsigned mem_lock(int file_desc, unsigned handle)
+{
+	unsigned p[32];
+
+	mb_set_lock_mem(p, file_desc, handle);
+
+	return p[5];
+}
+
+unsigned mem_unlock(int file_desc, unsigned handle)
+{
+	unsigned p[32];
+
+	mb_set_unlock_mem(p, file_desc, handle);
+
+	return p[5];
+}
+
+unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
+{
+	unsigned p[32];
+
+	mb_set_execute_code(p, file_desc, code, r0, r1, r2, r3, r4, r5);
+
+	return p[5];
+}
+
+unsigned qpu_enable(int file_desc, unsigned enable)
+{
+	unsigned p[32];
+
+	mb_set_enable_qpu(p, file_desc, enable);
+
+	return p[5];
+}
+
+unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
+{
+	unsigned p[32];
+
+	mb_set_execute_qpu(p, file_desc, num_qpus, control, noflush, timeout);
+
+	return p[5];
+}

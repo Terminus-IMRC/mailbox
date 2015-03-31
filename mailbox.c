@@ -42,10 +42,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mb_send.h"
 #include "error.h"
 
-unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
+void mb_set_allocate_mem(unsigned p[], int file_desc, unsigned size, unsigned align, unsigned flags)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -58,17 +57,14 @@ unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 	p[i++] = flags; // (MEM_FLAG_L1_NONALLOCATING)
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned mem_free(int file_desc, unsigned handle)
+void mb_set_release_mem(unsigned p[], int file_desc, unsigned handle)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -79,17 +75,14 @@ unsigned mem_free(int file_desc, unsigned handle)
 	p[i++] = handle;
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned mem_lock(int file_desc, unsigned handle)
+void mb_set_lock_mem(unsigned p[], int file_desc, unsigned handle)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -100,17 +93,14 @@ unsigned mem_lock(int file_desc, unsigned handle)
 	p[i++] = handle;
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned mem_unlock(int file_desc, unsigned handle)
+void mb_set_unlock_mem(unsigned p[], int file_desc, unsigned handle)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -121,17 +111,14 @@ unsigned mem_unlock(int file_desc, unsigned handle)
 	p[i++] = handle;
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
+void mb_set_execute_code(unsigned p[], int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -148,17 +135,14 @@ unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, un
 	p[i++] = r5;
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned qpu_enable(int file_desc, unsigned enable)
+void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
@@ -169,20 +153,18 @@ unsigned qpu_enable(int file_desc, unsigned enable)
 	p[i++] = enable;
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
 
-unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
+void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout)
 {
 	int i = 0;
-	unsigned p[32];
 
 	p[i++] = 0; // size
 	p[i++] = VCMSG_PROCESS_REQUEST;
+
 	p[i++] = VCMSG_SET_EXECUTE_QPU; // (the tag id)
 	p[i++] = 16; // (size of the buffer)
 	p[i++] = 16; // (size of the data)
@@ -192,9 +174,7 @@ unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigne
 	p[i++] = timeout; // ms
 
 	p[i++] = VCMSG_PROPERTY_END;
-	p[0] = i * sizeof(*p); // actual size
+	p[0] = i * sizeof(p[0]); // actual size
 
 	mbox_property(file_desc, p);
-
-	return p[5];
 }
