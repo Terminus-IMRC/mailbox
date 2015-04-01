@@ -607,10 +607,10 @@ void mbfb_append_tst_palette(unsigned p[], int *ip, unsigned offset, unsigned le
 
 	p[(*ip)++] = VCMSG_TST_PALETTE;
 	p[(*ip)++] = 4;
-	p[(*ip)++] = 8 + length * 4 * 4;
+	p[(*ip)++] = 8 + length * 4;
 	p[(*ip)++] = offset;
 	p[(*ip)++] = length;
-	for (j = 0; j < length * 4; j++)
+	for (j = 0; j < length; j++)
 		p[(*ip)++] = values[j];
 }
 
@@ -620,9 +620,9 @@ void mbfb_append_set_palette(unsigned p[], int *ip, unsigned offset, unsigned le
 
 	p[(*ip)++] = VCMSG_SET_PALETTE;
 	p[(*ip)++] = 4;
-	p[(*ip)++] = 8 + length * 4 * 4;
+	p[(*ip)++] = 8 + length * 4;
 	p[(*ip)++] = offset;
 	p[(*ip)++] = length;
-	for (j = 0; j < length * 4; j++)
+	for (j = 0; j < length; j++)
 		p[(*ip)++] = values[j];
 }
