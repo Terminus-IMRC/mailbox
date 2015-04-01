@@ -353,6 +353,8 @@ void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
 
 void mbfb_initialize(unsigned p[], int *ip)
 {
+	*ip = 0;
+
 	p[(*ip)++] = 0;
 	p[(*ip)++] = VCMSG_PROCESS_REQUEST;
 }
