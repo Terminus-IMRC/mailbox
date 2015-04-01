@@ -44,6 +44,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	void mb_set_execute_qpu(unsigned p[], int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
 	void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable);
 
+	void mbfb_initialize(unsigned p[], int *ip);
+	void mbfb_finalize(unsigned p[], int *ip);
+	void mbfb_do(unsigned p[], int file_desc);
+	void mbfb_append_set_allocate_buffer(unsigned p[], int *ip, unsigned align);
+	void mbfb_append_set_release_buffer(unsigned p[], int *ip);
+	void mbfb_append_set_blank_screen(unsigned p[], int *ip, unsigned state);
+	void mbfb_append_get_physical_width_height(unsigned p[], int *ip);
+	void mbfb_append_tst_physical_width_height(unsigned p[], int *ip, unsigned width, unsigned height);
+	void mbfb_append_set_physical_width_height(unsigned p[], int *ip, unsigned width, unsigned height);
+	void mbfb_append_get_virtual_width_height(unsigned p[], int *ip);
+	void mbfb_append_tst_virtual_width_height(unsigned p[], int *ip, unsigned width, unsigned height);
+	void mbfb_append_set_virtual_width_height(unsigned p[], int *ip, unsigned width, unsigned height);
+	void mbfb_append_get_depth(unsigned p[], int *ip);
+	void mbfb_append_tst_depth(unsigned p[], int *ip, unsigned bpp);
+	void mbfb_append_set_depth(unsigned p[], int *ip, unsigned bpp);
+	void mbfb_append_get_pixel_order(unsigned p[], int *ip);
+	void mbfb_append_tst_pixel_order(unsigned p[], int *ip, unsigned state);
+	void mbfb_append_set_pixel_order(unsigned p[], int *ip, unsigned state);
+	void mbfb_append_get_alpha_mode(unsigned p[], int *ip);
+	void mbfb_append_tst_alpha_mode(unsigned p[], int *ip, unsigned state);
+	void mbfb_append_set_alpha_mode(unsigned p[], int *ip, unsigned state);
+	void mbfb_append_get_pitch(unsigned p[], int *ip);
+	void mbfb_append_get_virtual_offset(unsigned p[], int *ip);
+	void mbfb_append_tst_virtual_offset(unsigned p[], int *ip, unsigned x, unsigned y);
+	void mbfb_append_set_virtual_offset(unsigned p[], int *ip, unsigned x, unsigned y);
+	void mbfb_append_get_overscan(unsigned p[], int *ip);
+	void mbfb_append_tst_overscan(unsigned p[], int *ip, unsigned top, unsigned bottom, unsigned left, unsigned right);
+	void mbfb_append_set_overscan(unsigned p[], int *ip, unsigned top, unsigned bottom, unsigned left, unsigned right);
+	void mbfb_append_get_palette(unsigned p[], int *ip);
+	void mbfb_append_tst_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[]);
+	void mbfb_append_set_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[]);
+
 #include "mapmem.h"
 #include "mbfd.h"
 #include "mb_frontend.h"

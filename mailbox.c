@@ -350,3 +350,277 @@ void mb_set_enable_qpu(unsigned p[], int file_desc, unsigned enable)
 
 	CHECK_PR_VALIDITY(p);
 }
+
+void mbfb_initialize(unsigned p[], int *ip)
+{
+	p[(*ip)++] = 0;
+	p[(*ip)++] = VCMSG_PROCESS_REQUEST;
+}
+
+void mbfb_finalize(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_PROPERTY_END;
+	p[0] = *ip * sizeof(p[0]);
+}
+
+void mbfb_do(unsigned p[], int file_desc)
+{
+	mbox_property(file_desc, p);
+
+	CHECK_PR_VALIDITY(p);
+}
+
+void mbfb_append_set_allocate_buffer(unsigned p[], int *ip, unsigned align)
+{
+	p[(*ip)++] = VCMSG_SET_ALLOCATE_BUFFER;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = align;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_set_release_buffer(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_SET_RELEASE_BUFFER;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_set_blank_screen(unsigned p[], int *ip, unsigned state)
+{
+	p[(*ip)++] = VCMSG_SET_BLANK_SCREEN;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = state;
+}
+
+void mbfb_append_get_physical_width_height(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_PHYSICAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_physical_width_height(unsigned p[], int *ip, unsigned width, unsigned height)
+{
+	p[(*ip)++] = VCMSG_TST_PHYSICAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = width;
+	p[(*ip)++] = height;
+}
+
+void mbfb_append_set_physical_width_height(unsigned p[], int *ip, unsigned width, unsigned height)
+{
+	p[(*ip)++] = VCMSG_SET_PHYSICAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = width;
+	p[(*ip)++] = height;
+}
+
+void mbfb_append_get_virtual_width_height(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_VIRTUAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_virtual_width_height(unsigned p[], int *ip, unsigned width, unsigned height)
+{
+	p[(*ip)++] = VCMSG_TST_VIRTUAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = width;
+	p[(*ip)++] = height;
+}
+
+void mbfb_append_set_virtual_width_height(unsigned p[], int *ip, unsigned width, unsigned height)
+{
+	p[(*ip)++] = VCMSG_SET_VIRTUAL_WIDTH_HEIGHT;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = width;
+	p[(*ip)++] = height;
+}
+
+void mbfb_append_get_depth(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_DEPTH;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_depth(unsigned p[], int *ip, unsigned bpp)
+{
+	p[(*ip)++] = VCMSG_TST_DEPTH;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = bpp;
+}
+
+void mbfb_append_set_depth(unsigned p[], int *ip, unsigned bpp)
+{
+	p[(*ip)++] = VCMSG_SET_DEPTH;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = bpp;
+}
+
+void mbfb_append_get_pixel_order(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_PIXEL_ORDER;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_pixel_order(unsigned p[], int *ip, unsigned state)
+{
+	p[(*ip)++] = VCMSG_TST_PIXEL_ORDER;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = state;
+}
+
+void mbfb_append_set_pixel_order(unsigned p[], int *ip, unsigned state)
+{
+	p[(*ip)++] = VCMSG_SET_PIXEL_ORDER;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = state;
+}
+
+void mbfb_append_get_alpha_mode(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_ALPHA_MODE;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_alpha_mode(unsigned p[], int *ip, unsigned state)
+{
+	p[(*ip)++] = VCMSG_TST_ALPHA_MODE;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = state;
+}
+
+void mbfb_append_set_alpha_mode(unsigned p[], int *ip, unsigned state)
+{
+	p[(*ip)++] = VCMSG_SET_ALPHA_MODE;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = state;
+}
+
+void mbfb_append_get_pitch(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_PITCH;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_get_virtual_offset(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_VIRTUAL_OFFSET;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_virtual_offset(unsigned p[], int *ip, unsigned x, unsigned y)
+{
+	p[(*ip)++] = VCMSG_TST_VIRTUAL_OFFSET;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = x;
+	p[(*ip)++] = y;
+}
+
+void mbfb_append_set_virtual_offset(unsigned p[], int *ip, unsigned x, unsigned y)
+{
+	p[(*ip)++] = VCMSG_SET_VIRTUAL_OFFSET;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = 8;
+	p[(*ip)++] = x;
+	p[(*ip)++] = y;
+}
+
+void mbfb_append_get_overscan(unsigned p[], int *ip)
+{
+	p[(*ip)++] = VCMSG_GET_OVERSCAN;
+	p[(*ip)++] = 16;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+	p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_overscan(unsigned p[], int *ip, unsigned top, unsigned bottom, unsigned left, unsigned right)
+{
+	p[(*ip)++] = VCMSG_TST_OVERSCAN;
+	p[(*ip)++] = 16;
+	p[(*ip)++] = 16;
+	p[(*ip)++] = top;
+	p[(*ip)++] = bottom;
+	p[(*ip)++] = left;
+	p[(*ip)++] = right;
+}
+
+void mbfb_append_set_overscan(unsigned p[], int *ip, unsigned top, unsigned bottom, unsigned left, unsigned right)
+{
+	p[(*ip)++] = VCMSG_SET_OVERSCAN;
+	p[(*ip)++] = 16;
+	p[(*ip)++] = 16;
+	p[(*ip)++] = top;
+	p[(*ip)++] = bottom;
+	p[(*ip)++] = left;
+	p[(*ip)++] = right;
+}
+
+void mbfb_append_get_palette(unsigned p[], int *ip)
+{
+	unsigned j;
+
+	p[(*ip)++] = VCMSG_GET_PALETTE;
+	p[(*ip)++] = 1024;
+	p[(*ip)++] = 0;
+	for (j = 0; j < 1024 / sizeof(p[0]); j++)
+		p[(*ip)++] = 0;
+}
+
+void mbfb_append_tst_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[])
+{
+	unsigned j;
+
+	p[(*ip)++] = VCMSG_TST_PALETTE;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 8 + length * 4 * 4;
+	p[(*ip)++] = offset;
+	p[(*ip)++] = length;
+	for (j = 0; j < length * 4; j++)
+		p[(*ip)++] = values[j];
+}
+
+void mbfb_append_set_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[])
+{
+	unsigned j;
+
+	p[(*ip)++] = VCMSG_SET_PALETTE;
+	p[(*ip)++] = 4;
+	p[(*ip)++] = 8 + length * 4 * 4;
+	p[(*ip)++] = offset;
+	p[(*ip)++] = length;
+	for (j = 0; j < length * 4; j++)
+		p[(*ip)++] = values[j];
+}
