@@ -98,6 +98,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	unsigned xmem_lock(int file_desc, unsigned handle);
 	unsigned xmem_unlock(int file_desc, unsigned handle);
 
-#define BUS_TO_PHYS(addr) (((addr)) & ~0xf0000000)
+#define BUS_TO_PHYS(addr) (((addr)) & ~0xc0000000)
 
 #endif /* _MAILBOX_H_INCLUDED_ */
