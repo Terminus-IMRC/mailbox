@@ -80,4 +80,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mbfd.h"
 #include "mb_frontend.h"
 
+#define BUS_TO_PHYS(addr) (((addr)) & ~0xf0000000)
+
 #endif /* _MAILBOX_H_INCLUDED_ */
