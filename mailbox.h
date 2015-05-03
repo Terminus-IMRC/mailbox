@@ -76,9 +76,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	void mbfb_append_tst_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[]);
 	void mbfb_append_set_palette(unsigned p[], int *ip, unsigned offset, unsigned length, unsigned values[]);
 
-#include "mapmem.h"
-#include "mbfd.h"
-#include "mb_frontend.h"
+	void *mapmem_cpu(unsigned base, unsigned size);
+	void unmapmem_cpu(void *addr, unsigned size);
+
+	int mbox_open();
+	void mbox_close(int file_desc);
+
+	unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
+	unsigned mem_free(int file_desc, unsigned handle);
+	unsigned mem_lock(int file_desc, unsigned handle);
+	unsigned mem_unlock(int file_desc, unsigned handle);
+	unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5);
+	unsigned qpu_enable(int file_desc, unsigned enable);
+	unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout);
+
+	int xmbox_open();
+	void xmbox_close(int file_desc);
+	void *xmapmem_cpu(unsigned base, unsigned size);
+	unsigned xmem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags);
+	unsigned xmem_free(int file_desc, unsigned handle);
+	unsigned xmem_lock(int file_desc, unsigned handle);
+	unsigned xmem_unlock(int file_desc, unsigned handle);
 
 #define BUS_TO_PHYS(addr) (((addr)) & ~0xf0000000)
 
