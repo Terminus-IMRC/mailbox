@@ -5,7 +5,7 @@ SRCS := mailbox.c xmailbox.c mapmem.c mbfd.c mb_send.c mb_frontend.c
 OBJS := $(SRCS:%.c=%.c.o)
 DEPS := $(SRCS:%.c=%.c.d)
 ALLDEPS = $(MAKEFILE_LIST_SANS_DEPS)
-CFLAGS := -Wall -Wextra -O2
+CFLAGS := -Wall -Wextra -O2 -g
 
 CC := gcc
 AR := ar
