@@ -367,10 +367,6 @@ void mbfb_finalize(unsigned p[], int *ip)
 
 void mbfb_do(unsigned p[], int file_desc)
 {
-	if (*ip <= 2) {
-		error("short buffer count (not finalized?): %d\n");
-		exit(EXIT_FAILURE);
-	}
 	mbox_property(file_desc, p);
 
 	CHECK_PR_VALIDITY(p);
