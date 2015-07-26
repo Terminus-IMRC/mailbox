@@ -1,6 +1,6 @@
 all:
 
-TARGET := libmailbox.so
+TARGET := libmailbox.so libmailbox.a
 SRCS := mailbox.c xmailbox.c mapmem.c mbfd.c mb_send.c mb_frontend.c
 OBJS := $(SRCS:%.c=%.c.o)
 DEPS := $(SRCS:%.c=%.c.d)
@@ -36,6 +36,10 @@ COMPILE.c = $(CC) $(CFLAGS) $(EXTRACFLAGS) $(CPPFLAGS) $(EXTRACPPFLAGS) $(TARGET
 COMPILE.d = $(CC) $(CFLAGS) $(EXTRACFLAGS) $(CPPFLAGS) $(EXTRACPPFLAGS) $(TARGET_ARCH) -M -MP -MT $<.o -MF $@
 
 all: $(TARGET)
+
+libmailbox.a: $(OBJS) $(ALLDEPS)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $@
 
 libmailbox.so: $(OBJS) $(ALLDEPS)
 	$(COMPILE.o) $(OUTPUT_OPTION) $(OBJS)
