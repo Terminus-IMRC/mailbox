@@ -45,7 +45,7 @@ int mbox_open()
 	int file_desc;
 
 	// open a char device file used for communicating with kernel mbox driver
-	file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, 0);
+	file_desc = open(DEVICE_PREFIX DEVICE_FILE_NAME, O_NONBLOCK);
 	if (file_desc < 0) {
 		error("open: %s: %s\n", DEVICE_PREFIX DEVICE_FILE_NAME, strerror(errno));
 		exit(EXIT_FAILURE);
