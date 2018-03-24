@@ -1,3 +1,10 @@
+test/info
+libmailbox.pc
+
+CPackConfig.cmake
+CPackSourceConfig.cmake
+DartConfiguration.tcl
+
 
 # Created by https://www.gitignore.io/api/c,git,vim,linux,emacs,macos,cmake,windows
 
