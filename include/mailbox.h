@@ -54,4 +54,13 @@
 
 #define VCIO_FILE_NAME "/dev/vcio"
 
+#define MEM_FLAG_DISCARDABLE      (1<<0)
+#define MEM_FLAG_NORMAL           (0<<2)
+#define MEM_FLAG_DIRECT           (1<<2)
+#define MEM_FLAG_COHERENT         (1<<3)
+#define MEM_FLAG_L1_NONALLOCATING (MEM_FLAG_DIRECT | MEM_FLAG_COHERENT)
+#define MEM_FLAG_ZERO             (1<<4)
+#define MEM_FLAG_NO_INIT          (1<<5)
+#define MEM_FLAG_HINT_PERMALOCK   (1<<6)
+
 #endif /* MAILBOX_H_ */
