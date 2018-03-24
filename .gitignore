@@ -1,8 +1,10 @@
 test/info
 libmailbox.pc
+libmailbox-*-*.deb
 
 CPackConfig.cmake
 CPackSourceConfig.cmake
+_CPack_Packages/
 DartConfiguration.tcl
 
 
