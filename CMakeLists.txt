@@ -19,5 +19,6 @@ add_subdirectory(src)
 add_subdirectory(include)
 add_subdirectory(test)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/libmailbox.pc.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/libmailbox.pc" @ONLY)
+configure_file(libmailbox.pc.in libmailbox.pc @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmailbox.pc"
+        DESTINATION lib/pkgconfig)
