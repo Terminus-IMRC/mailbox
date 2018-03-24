@@ -13,6 +13,13 @@ $ make
 $ sudo make install
 ```
 
+Or you can create `.deb` package:
+
+```
+$ make package
+$ sudo dpkg -i libmailbox-x.y.z-system.deb
+```
+
 
 ## Running tests
 
