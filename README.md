@@ -24,5 +24,5 @@ $ sudo dpkg -i libmailbox-x.y.z-system.deb
 ## Running tests
 
 ```
-$ ctest -V
+$ make test ARGS=-V
 ```

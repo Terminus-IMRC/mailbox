@@ -4,4 +4,8 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 add_executable(info info.c)
 target_link_libraries(info LINK_PUBLIC mailbox)
-add_test(info info)
+add_test(Info info)
+
+add_executable(memflag memflag.c)
+target_link_libraries(memflag LINK_PUBLIC mailbox)
+add_test(MemFlag memflag)

@@ -1,4 +1,5 @@
 test/info
+test/memflag
 libmailbox.pc
 libmailbox-*-*.deb
 
