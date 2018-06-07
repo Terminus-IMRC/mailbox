@@ -30,6 +30,9 @@
     int mailbox_mem_free(const int fd, const uint32_t handle);
     uint32_t mailbox_mem_lock(const int fd, const uint32_t handle);
     int mailbox_mem_unlock(const int fd, const uint32_t busaddr);
+    int mailbox_execute_code(const int fd, const uint32_t code,
+            const uint32_t r0, const uint32_t r1, const uint32_t r2,
+            const uint32_t r3, const uint32_t r4, const uint32_t r5);
     int mailbox_qpu_execute(const int fd, const uint32_t num_qpus,
             const uint32_t control, const uint32_t noflush,
             const uint32_t timeout);

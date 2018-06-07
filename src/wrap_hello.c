@@ -121,6 +121,38 @@ int mailbox_mem_unlock(const int fd, const uint32_t busaddr)
     return 0;
 }
 
+int mailbox_execute_code(const int fd, const uint32_t code, const uint32_t r0,
+        const uint32_t r1, const uint32_t r2, const uint32_t r3,
+        const uint32_t r4, const uint32_t r5)
+{
+    union {
+        struct {
+            uint32_t code, r0, r1, r2, r3, r4, r5;
+        } in;
+        struct {
+            uint32_t r0;
+        } out;
+    } msg = {
+        .in = {
+            .code = code,
+            .r0 = r0,
+            .r1 = r1,
+            .r2 = r2,
+            .r3 = r3,
+            .r4 = r4,
+            .r5 = r5
+        }
+    };
+    int err;
+
+    err = rpi_firmware_property(fd, RPI_FIRMWARE_EXECUTE_CODE, &msg,
+            sizeof(msg.in), sizeof(msg.out));
+    if (err)
+        return err;
+
+    return msg.out.r0;
+}
+
 int mailbox_qpu_execute(const int fd, const uint32_t num_qpus,
         const uint32_t control, const uint32_t noflush,
         const uint32_t timeout)
