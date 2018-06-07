@@ -8,9 +8,12 @@ set(CPACK_PACKAGE_NAME "libmailbox")
 set(CPACK_PACKAGE_CONTACT "Sugizaki Yukimasa <ysugi@idein.jp>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
         "A wrapper library for Mailbox interface of Raspberry Pi")
-set(CPACK_PACKAGE_VERSION_MAJOR 2)
+
+#See https://semver.org/ and https://www.pakin.org/~scott/ltver.html .
+set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_VERSION_PATCH 1)
+
 if ("${CPACK_PACKAGING_INSTALL_PREFIX}" STREQUAL "")
     set(CPACK_PACKAGING_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 endif()
