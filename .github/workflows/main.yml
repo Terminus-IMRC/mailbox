@@ -1,0 +1,40 @@
+on: push
+
+jobs:
+
+  build-package:
+    runs-on: ubuntu-latest
+    container: debian:bullseye-slim
+    env:
+      mailbox_version: 3.1.1
+    strategy:
+      matrix:
+        include:
+          - arch: armhf
+            triplet: arm-linux-gnueabihf
+            cflags: -mcpu=arm1176jzf-s -mtune=arm1176jzf-s -mfloat-abi=hard -marm -mfpu=vfp
+          - arch: arm64
+            triplet: aarch64-linux-gnu
+            cflags: -mcpu=cortex-a72 -mtune=cortex-a72
+    steps:
+      - name: Install cross toolchain
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          dpkg --add-architecture '${{ matrix.arch }}'
+          apt-get update
+          apt-get install -y --no-install-recommends pkg-config cmake 'crossbuild-essential-${{ matrix.arch }}'
+          apt-get clean
+          rm -rf /var/lib/apt/lists/*
+      - name: Checkout source tree
+        uses: actions/checkout@v2
+      - name: Build package
+        run: |
+          cmake -B build/ -D BUILD_TESTING=FALSE -D CPACK_DEBIAN_PACKAGE_ARCHITECTURE='${{ matrix.arch }}' -D CMAKE_C_COMPILER='${{ matrix.triplet }}-gcc' -D CMAKE_C_FLAGS='${{ matrix.cflags }}'
+          cmake --build build/ -t package -v
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: libmailbox-${{ env.mailbox_version }}-${{ matrix.arch }}
+          path: build/libmailbox_${{ env.mailbox_version }}_${{ matrix.arch }}.deb
+          if-no-files-found: error
